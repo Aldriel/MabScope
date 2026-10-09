@@ -24,8 +24,18 @@ import com.bioinfo.mabscope.model.Antibody;
 import com.bioinfo.mabscope.model.Chain;
 import com.bioinfo.mabscope.model.ChainAnnotation;
 import com.bioinfo.mabscope.model.NumberingScheme;
+import com.bioinfo.mabscope.ms.MsFormat;
+import com.bioinfo.mabscope.ms.MsImport;
+import com.bioinfo.mabscope.ms.MsResultImporter;
+import com.bioinfo.mabscope.ms.ObservedPeptide;
+import com.bioinfo.mabscope.quant.LotComparator;
+import com.bioinfo.mabscope.quant.Quantification;
+import com.bioinfo.mabscope.quant.SiteComparison;
+import com.bioinfo.mabscope.quant.SiteQuantifier;
 import com.bioinfo.mabscope.region.CdrDetector;
 
+import java.io.IOException;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -40,6 +50,8 @@ import java.util.Objects;
 public final class AntibodyService {
 
     private final CdrDetector detector = new CdrDetector();
+    private final MsResultImporter importer = new MsResultImporter();
+    private final SiteQuantifier quantifier = new SiteQuantifier();
     private final LiabilityScanner scanner;
 
     /** Creates a service running every liability rule of MabScope. */
@@ -90,5 +102,54 @@ public final class AntibodyService {
             peptides.addAll(mapper.map(chain.annotation(), chain.liabilities()));
         }
         return peptides;
+    }
+
+    /**
+     * Imports the peptides measured by an MS software, detecting the format of the file.
+     *
+     * @param reader content of the result file; it is not closed
+     * @return the observed peptides and the skipped rows
+     * @throws IOException if the file cannot be read
+     * @throws com.bioinfo.proteomics.parser.ParsingException if the format is not recognized
+     */
+    public MsImport importResults(Reader reader) throws IOException {
+        return importer.read(reader);
+    }
+
+    /**
+     * Imports the peptides measured by an MS software.
+     *
+     * @param reader content of the result file; it is not closed
+     * @param format format of the file
+     * @return the observed peptides and the skipped rows
+     * @throws IOException if the file cannot be read
+     * @throws com.bioinfo.proteomics.parser.ParsingException if a required column is missing
+     */
+    public MsImport importResults(Reader reader, MsFormat format) throws IOException {
+        return importer.read(reader, format);
+    }
+
+    /**
+     * Measures the coverage and the modification of each liability site.
+     *
+     * @param analysis the antibody, its regions and liabilities
+     * @param observed the peptides imported from one or more samples
+     * @return the quantities of each site in each sample
+     */
+    public Quantification quantify(AntibodyAnalysis analysis, List<ObservedPeptide> observed) {
+        return quantifier.quantify(analysis, observed);
+    }
+
+    /**
+     * Compares the modification levels of every sample with a reference lot.
+     *
+     * @param quantification the quantities of each site in each sample
+     * @param reference name of the reference sample
+     * @param threshold largest acceptable deviation, in percentage points
+     * @return one comparison per form of each site measured in the reference
+     */
+    public List<SiteComparison> compareLots(
+            Quantification quantification, String reference, double threshold) {
+        return new LotComparator(threshold).compare(quantification, reference);
     }
 }

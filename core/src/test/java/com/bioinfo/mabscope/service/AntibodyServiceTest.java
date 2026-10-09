@@ -32,10 +32,16 @@ import com.bioinfo.mabscope.model.Chain;
 import com.bioinfo.mabscope.model.ChainType;
 import com.bioinfo.mabscope.model.NumberingScheme;
 import com.bioinfo.mabscope.model.Region;
+import com.bioinfo.mabscope.ms.MsFormat;
+import com.bioinfo.mabscope.ms.MsImport;
+import com.bioinfo.mabscope.quant.Quantification;
+import com.bioinfo.mabscope.quant.SiteComparison;
 import com.bioinfo.mabscope.region.RegionNotFoundException;
 
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
+import java.io.StringReader;
 import java.util.List;
 
 class AntibodyServiceTest {
@@ -65,6 +71,30 @@ class AntibodyServiceTest {
         var map = service.peptideMap(a, DigestionSettings.trypsinDefaults());
         assertTrue(map.stream().anyMatch(p -> p.chainName().equals("Heavy chain")));
         assertTrue(map.stream().anyMatch(p -> p.chainName().equals("Light chain")));
+    }
+
+    @Test
+    void importQuantifyAndCompareLots() throws IOException {
+        String csv =
+                """
+                sequence,sample,intensity
+                IYPTNGYTR,Reference,950
+                IYPTN[Deamidated]GYTR,Reference,50
+                IYPTNGYTR,Stressed 40 C,600
+                IYPTN[Deamidated]GYTR,Stressed 40 C,400
+                """;
+        AntibodyAnalysis a = service.analyze(trastuzumab, NumberingScheme.KABAT);
+        MsImport imported = service.importResults(new StringReader(csv));
+        assertEquals(MsFormat.GENERIC, imported.format());
+        Quantification q = service.quantify(a, imported.peptides());
+        assertEquals(List.of("Reference", "Stressed 40 C"), q.samples());
+        List<SiteComparison> rows = service.compareLots(q, "Reference", 5);
+        assertEquals(1, rows.size());
+        assertEquals(55, rows.getFirst().site().position());
+        assertEquals(35, rows.getFirst().maxDeviation(), 1e-9);
+        assertTrue(rows.getFirst().flagged());
+        MsImport explicit = service.importResults(new StringReader(csv), MsFormat.GENERIC);
+        assertEquals(4, explicit.peptides().size());
     }
 
     @Test
