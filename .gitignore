@@ -1,0 +1,17 @@
+# Maven build output
+target/
+
+# Web client: dependencies, production build and test reports
+web/client/node_modules/
+web/client/dist/
+web/client/test-results/
+web/client/playwright-report/
+
+# IDE settings
+.idea/
+*.iml
+.vscode/
+
+# Operating system files
+Thumbs.db
+.DS_Store
