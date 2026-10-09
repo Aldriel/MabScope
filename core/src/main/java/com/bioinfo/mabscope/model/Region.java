@@ -17,8 +17,8 @@
 package com.bioinfo.mabscope.model;
 
 /**
- * Structural regions of an antibody chain, from the N-terminus. The variable domain alternates
- * four framework regions (FR) and three complementarity-determining regions (CDR), which form the
+ * Structural regions of an antibody chain, from the N-terminus. The variable domain alternates four
+ * framework regions (FR) and three complementarity-determining regions (CDR), which form the
  * antigen-binding site; the constant domains follow.
  */
 public enum Region {

@@ -61,11 +61,9 @@ class ModelTest {
             assertThrows(NullPointerException.class, () -> new Chain("H", ChainType.HEAVY, null));
             assertThrows(
                     IllegalArgumentException.class, () -> new Chain(" ", ChainType.HEAVY, "A"));
+            assertThrows(IllegalArgumentException.class, () -> new Chain("H", ChainType.HEAVY, ""));
             assertThrows(
-                    IllegalArgumentException.class, () -> new Chain("H", ChainType.HEAVY, ""));
-            assertThrows(
-                    IllegalArgumentException.class,
-                    () -> new Chain("H", ChainType.HEAVY, "EV QL"));
+                    IllegalArgumentException.class, () -> new Chain("H", ChainType.HEAVY, "EV QL"));
         }
 
         @Test

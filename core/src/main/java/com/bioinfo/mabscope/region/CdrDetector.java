@@ -33,8 +33,8 @@ import java.util.regex.Pattern;
  * by Andrew C.R. Martin (<a href="http://www.bioinf.org.uk/abs/info.html#cdrid">"How to identify
  * the CDRs by looking at a sequence"</a>), so that no alignment or numbering software is needed.
  *
- * <p>The rules give the Kabat and AbM boundaries; the Chothia boundaries are derived from them.
- * All positions are 1-based.
+ * <p>The rules give the Kabat and AbM boundaries; the Chothia boundaries are derived from them. All
+ * positions are 1-based.
  */
 public final class CdrDetector {
 
@@ -184,10 +184,7 @@ public final class CdrDetector {
             }
             throw notFound(
                     region,
-                    "no cysteine within "
-                            + tolerance
-                            + " residues of position "
-                            + expected);
+                    "no cysteine within " + tolerance + " residues of position " + expected);
         }
 
         /**

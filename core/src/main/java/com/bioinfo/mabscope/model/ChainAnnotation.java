@@ -78,10 +78,6 @@ public record ChainAnnotation(Chain chain, NumberingScheme scheme, List<RegionSp
      */
     public Region regionAt(int position) {
         Objects.checkIndex(position - 1, chain.length());
-        return spans.stream()
-                .filter(s -> s.contains(position))
-                .findFirst()
-                .orElseThrow()
-                .region();
+        return spans.stream().filter(s -> s.contains(position)).findFirst().orElseThrow().region();
     }
 }

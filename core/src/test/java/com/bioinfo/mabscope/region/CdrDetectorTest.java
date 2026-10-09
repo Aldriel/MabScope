@@ -22,6 +22,7 @@ import static com.bioinfo.mabscope.ReferenceAntibodies.TRASTUZUMAB_HEAVY;
 import static com.bioinfo.mabscope.ReferenceAntibodies.TRASTUZUMAB_LIGHT;
 import static com.bioinfo.mabscope.ReferenceAntibodies.TRASTUZUMAB_VH;
 import static com.bioinfo.mabscope.ReferenceAntibodies.TRASTUZUMAB_VL;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -184,9 +185,7 @@ class CdrDetectorTest {
         void unusualResiduesAfterCdrL1() {
             // W-H-Q instead of W-Y-Q: the tryptophan alone still ends CDR-L1.
             String mutated = TRASTUZUMAB_VL.replace("WYQQKP", "WHQQKP");
-            assertEquals(
-                    "RASQDVNTAVA",
-                    region(light(mutated, NumberingScheme.KABAT), Region.CDR1));
+            assertEquals("RASQDVNTAVA", region(light(mutated, NumberingScheme.KABAT), Region.CDR1));
         }
 
         @Test
