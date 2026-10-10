@@ -19,7 +19,8 @@
     </licenses>
 
     <!--
-      core        shared Model (antibody, regions, liabilities, peptide mapping, report)
+      core        shared Model (antibody, regions, liabilities, peptide mapping, MS import,
+                  quantification, PDF report)
     -->
     <modules>
         <module>core</module>
@@ -31,6 +32,7 @@
         <!-- Built from https://github.com/Aldriel/ProteoSpectra-Explorer at the tag v${pride.version}. -->
         <pride.version>1.1.1</pride.version>
         <jackson.version>2.17.2</jackson.version>
+        <pdfbox.version>3.0.8</pdfbox.version>
         <junit.version>5.10.3</junit.version>
         <jacoco.version>0.8.12</jacoco.version>
         <checkstyle.dir>${maven.multiModuleProjectDirectory}/config/checkstyle</checkstyle.dir>
@@ -47,6 +49,11 @@
                 <groupId>com.bioinfo.proteomics</groupId>
                 <artifactId>pride-core</artifactId>
                 <version>${pride.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.pdfbox</groupId>
+                <artifactId>pdfbox</artifactId>
+                <version>${pdfbox.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.fasterxml.jackson</groupId>

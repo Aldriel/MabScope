@@ -33,8 +33,11 @@ import com.bioinfo.mabscope.quant.Quantification;
 import com.bioinfo.mabscope.quant.SiteComparison;
 import com.bioinfo.mabscope.quant.SiteQuantifier;
 import com.bioinfo.mabscope.region.CdrDetector;
+import com.bioinfo.mabscope.report.PdfReportWriter;
+import com.bioinfo.mabscope.report.QcReport;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +55,7 @@ public final class AntibodyService {
     private final CdrDetector detector = new CdrDetector();
     private final MsResultImporter importer = new MsResultImporter();
     private final SiteQuantifier quantifier = new SiteQuantifier();
+    private final PdfReportWriter reportWriter = new PdfReportWriter();
     private final LiabilityScanner scanner;
 
     /** Creates a service running every liability rule of MabScope. */
@@ -151,5 +155,16 @@ public final class AntibodyService {
     public List<SiteComparison> compareLots(
             Quantification quantification, String reference, double threshold) {
         return new LotComparator(threshold).compare(quantification, reference);
+    }
+
+    /**
+     * Renders a quality control report as a PDF file.
+     *
+     * @param report the content of the report, assembled with {@link QcReport#builder}
+     * @param output receives the PDF file; it is not closed
+     * @throws IOException if the document cannot be produced or written
+     */
+    public void writeReport(QcReport report, OutputStream output) throws IOException {
+        reportWriter.write(report, output);
     }
 }
