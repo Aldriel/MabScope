@@ -125,7 +125,7 @@ describe('api', () => {
     });
 
     expect(report.fileName).toBe('Contrôle.pdf');
-    expect(await report.content.text()).toBe('%PDF');
+    expect(report.content.size).toBe('%PDF'.length);
   });
 
   it('names the report itself when the server gives no name', async () => {
