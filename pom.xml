@@ -21,9 +21,11 @@
     <!--
       core        shared Model (antibody, regions, liabilities, peptide mapping, MS import,
                   quantification, PDF report)
+      server      REST API on the JDK HTTP server, consumed by the React web application
     -->
     <modules>
         <module>core</module>
+        <module>server</module>
     </modules>
 
     <properties>
