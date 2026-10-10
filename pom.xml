@@ -21,10 +21,12 @@
     <!--
       core        shared Model (antibody, regions, liabilities, peptide mapping, MS import,
                   quantification, PDF report)
+      desktop     JavaFX application (desktop View + Controllers)
       server      REST API on the JDK HTTP server, consumed by the React web application
     -->
     <modules>
         <module>core</module>
+        <module>desktop</module>
         <module>server</module>
     </modules>
 
@@ -37,6 +39,8 @@
         <pdfbox.version>3.0.8</pdfbox.version>
         <junit.version>5.10.3</junit.version>
         <jacoco.version>0.8.12</jacoco.version>
+        <javafx.version>21.0.5</javafx.version>
+        <monocle.version>21.0.2</monocle.version>
         <checkstyle.dir>${maven.multiModuleProjectDirectory}/config/checkstyle</checkstyle.dir>
     </properties>
 

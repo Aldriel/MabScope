@@ -268,6 +268,12 @@ class ReportTest {
     class Builder {
 
         @Test
+        void fileNameKeepsLettersAndDigitsOfAnyLanguage() {
+            assertEquals("MabScope-Trastuzumab-QC.pdf", QcReport.fileName("Trastuzumab"));
+            assertEquals("MabScope-Mab_1_é-QC.pdf", QcReport.fileName(" Mab 1/é "));
+        }
+
+        @Test
         void defaults() {
             QcReport report = QcReport.builder(ANALYSIS).build();
             assertEquals(Locale.ENGLISH, report.locale());

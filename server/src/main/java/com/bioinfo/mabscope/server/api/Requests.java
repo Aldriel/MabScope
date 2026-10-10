@@ -18,10 +18,7 @@ package com.bioinfo.mabscope.server.api;
 
 import com.bioinfo.mabscope.mapping.DigestionSettings;
 import com.bioinfo.mabscope.model.Antibody;
-import com.bioinfo.mabscope.model.Chain;
-import com.bioinfo.mabscope.model.ChainType;
 import com.bioinfo.mabscope.model.NumberingScheme;
-import com.bioinfo.mabscope.model.SequenceText;
 import com.bioinfo.mabscope.ms.ObservedPeptide;
 import com.bioinfo.mabscope.server.HttpError;
 import com.bioinfo.proteomics.digest.Protease;
@@ -69,24 +66,10 @@ public final class Requests {
          * Builds the antibody.
          *
          * @return the antibody, with one or two chains
-         * @throws HttpError with status 400 if both sequences are empty
-         * @throws IllegalArgumentException if a sequence holds an invalid residue
+         * @throws IllegalArgumentException if both sequences are empty or a residue is invalid
          */
         public Antibody toAntibody() {
-            String heavyResidues = SequenceText.clean(heavy);
-            String lightResidues = SequenceText.clean(light);
-            List<Chain> chains = new ArrayList<>();
-            if (!heavyResidues.isEmpty()) {
-                chains.add(new Chain("Heavy chain", ChainType.HEAVY, heavyResidues));
-            }
-            if (!lightResidues.isEmpty()) {
-                chains.add(new Chain("Light chain", ChainType.LIGHT, lightResidues));
-            }
-            if (chains.isEmpty()) {
-                throw new HttpError(400, "Enter the sequence of at least one chain");
-            }
-            String displayName = name == null || name.isBlank() ? "Antibody" : name.strip();
-            return new Antibody(displayName, chains);
+            return Antibody.fromText(name, heavy, light);
         }
 
         /** Returns the CDR definition, Kabat by default. */

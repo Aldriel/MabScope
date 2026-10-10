@@ -108,13 +108,9 @@ public final class ReportController extends JsonHandler {
         ByteArrayOutputStream pdf = new ByteArrayOutputStream();
         service.writeReport(report.build(), pdf);
         return new FileResponse(
-                pdf.toByteArray(), "application/pdf", fileName(analysis.antibody().name()));
-    }
-
-    /** Returns the name of the PDF file, such as {@code MabScope-Trastuzumab-QC.pdf}. */
-    static String fileName(String antibodyName) {
-        String safe = antibodyName.strip().replaceAll("[^\\p{L}\\p{N}._-]+", "_");
-        return "MabScope-" + safe + "-QC.pdf";
+                pdf.toByteArray(),
+                "application/pdf",
+                QcReport.fileName(analysis.antibody().name()));
     }
 
     private static Locale locale(String tag) {

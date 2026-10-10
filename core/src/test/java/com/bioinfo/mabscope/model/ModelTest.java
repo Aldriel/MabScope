@@ -90,6 +90,23 @@ class ModelTest {
         }
 
         @Test
+        void fromPastedText() {
+            Antibody both = Antibody.fromText(" Mab 1 ", ">VH\nevql\n", "DIQM*");
+            assertEquals("Mab 1", both.name());
+            assertEquals("EVQL", both.chain("Heavy chain").orElseThrow().sequence());
+            assertEquals("DIQM", both.chain("Light chain").orElseThrow().sequence());
+
+            Antibody lightOnly = Antibody.fromText(null, "  ", "DIQM");
+            assertEquals("Antibody", lightOnly.name());
+            assertEquals(
+                    List.of("Light chain"), lightOnly.chains().stream().map(Chain::name).toList());
+            assertEquals(1, Antibody.fromText(" ", "EVQL", null).chains().size());
+
+            assertThrows(IllegalArgumentException.class, () -> Antibody.fromText("A", null, ""));
+            assertThrows(IllegalArgumentException.class, () -> Antibody.fromText("A", "EV#", ""));
+        }
+
+        @Test
         void chainsAreCopied() {
             List<Chain> chains = new ArrayList<>(List.of(new Chain("H", ChainType.HEAVY, "EV")));
             Antibody ab = new Antibody("Test", chains);

@@ -73,6 +73,18 @@ public final class QcReport {
         return new Builder(analysis);
     }
 
+    /**
+     * Returns the name proposed for the report file of an antibody. Characters that are not
+     * letters, digits, dots or dashes are replaced, so that the name is valid on every system.
+     *
+     * @param antibodyName name of the antibody
+     * @return such as {@code MabScope-Trastuzumab-QC.pdf}
+     */
+    public static String fileName(String antibodyName) {
+        String safe = antibodyName.strip().replaceAll("[^\\p{L}\\p{N}._-]+", "_");
+        return "MabScope-" + safe + "-QC.pdf";
+    }
+
     /** Returns the analysis of the antibody. */
     public AntibodyAnalysis analysis() {
         return analysis;

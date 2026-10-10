@@ -14,20 +14,19 @@
  * limitations under the License.
  */
 
-package com.bioinfo.mabscope.server.controller;
+package com.bioinfo.mabscope.desktop;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import javafx.application.Application;
 
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+/**
+ * Entry point that does not extend {@link Application}, so the app also starts from a plain
+ * classpath.
+ */
+public final class DesktopLauncher {
 
-/** Unit tests of the report controller. */
-class ReportControllerTest {
+    private DesktopLauncher() {}
 
-    @Test
-    @DisplayName("the file name keeps letters and digits of any language")
-    void fileName() {
-        assertEquals("MabScope-Trastuzumab-QC.pdf", ReportController.fileName("Trastuzumab"));
-        assertEquals("MabScope-Mab_1_é-QC.pdf", ReportController.fileName(" Mab 1/é "));
+    public static void main(String[] args) {
+        Application.launch(DesktopApp.class, args);
     }
 }

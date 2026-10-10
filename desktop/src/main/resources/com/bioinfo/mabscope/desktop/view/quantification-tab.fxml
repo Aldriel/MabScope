@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  "LC-MS quantification" tab: import of the results of an MS software, sequence coverage,
+  modification level of each site and comparison of the lots with a reference. Texts are message
+  keys (see main-view.fxml).
+-->
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      spacing="8" styleClass="tab-content"
+      fx:controller="com.bioinfo.mabscope.desktop.controller.QuantificationTabController">
+
+    <HBox spacing="8" alignment="CENTER_LEFT">
+        <Button fx:id="importButton" text="quant.import" styleClass="primary-button"
+                onAction="#onImport">
+            <tooltip><Tooltip text="tip.import"/></tooltip>
+        </Button>
+        <Label text="quant.format"/>
+        <ComboBox fx:id="formatBox">
+            <tooltip><Tooltip text="tip.format"/></tooltip>
+        </ComboBox>
+        <Button text="antibody.demo" onAction="#onDemo">
+            <tooltip><Tooltip text="tip.demo"/></tooltip>
+        </Button>
+        <Button fx:id="clearButton" text="quant.clear" onAction="#onClear"/>
+        <Button text="?" styleClass="help-button" onAction="#onHelp">
+            <tooltip><Tooltip text="tip.tabHelp"/></tooltip>
+        </Button>
+    </HBox>
+
+    <Label fx:id="summaryLabel" styleClass="summary" wrapText="true"/>
+
+    <TitledPane fx:id="issuesPane" text="quant.issues" expanded="false" animated="false">
+        <ListView fx:id="issueList" prefHeight="110"/>
+    </TitledPane>
+
+    <TabPane fx:id="resultTabs" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
+        <Tab text="quant.tab.comparison">
+            <VBox spacing="8" styleClass="inner-tab">
+                <HBox spacing="8" alignment="CENTER_LEFT">
+                    <Label text="quant.reference"/>
+                    <ComboBox fx:id="referenceBox" prefWidth="180">
+                        <tooltip><Tooltip text="tip.reference"/></tooltip>
+                    </ComboBox>
+                    <Label text="quant.threshold"/>
+                    <Spinner fx:id="thresholdSpinner" prefWidth="85" editable="true">
+                        <tooltip><Tooltip text="tip.threshold"/></tooltip>
+                    </Spinner>
+                    <Separator orientation="VERTICAL"/>
+                    <Label fx:id="comparisonSummaryLabel" styleClass="summary"/>
+                </HBox>
+                <TableView fx:id="comparisonTable" VBox.vgrow="ALWAYS">
+                    <placeholder><Label text="quant.placeholder" wrapText="true"/></placeholder>
+                </TableView>
+            </VBox>
+        </Tab>
+        <Tab text="quant.tab.sites">
+            <TableView fx:id="siteTable">
+                <placeholder><Label text="quant.placeholder" wrapText="true"/></placeholder>
+                <columns>
+                    <TableColumn fx:id="siteChainColumn" text="column.chain" prefWidth="95"/>
+                    <TableColumn fx:id="siteSiteColumn" text="column.site" prefWidth="65"/>
+                    <TableColumn fx:id="siteTypeColumn" text="column.type" prefWidth="150"/>
+                    <TableColumn fx:id="siteRegionColumn" text="column.region" prefWidth="75"/>
+                    <TableColumn fx:id="siteSampleColumn" text="column.sample" prefWidth="120"/>
+                    <TableColumn fx:id="siteModifiedColumn" text="column.modified"
+                                 prefWidth="85"/>
+                    <TableColumn fx:id="siteFormsColumn" text="column.forms" prefWidth="420"/>
+                </columns>
+            </TableView>
+        </Tab>
+        <Tab text="quant.tab.coverage">
+            <VBox spacing="6" styleClass="inner-tab">
+                <TableView fx:id="coverageTable" VBox.vgrow="ALWAYS">
+                    <placeholder><Label text="quant.placeholder" wrapText="true"/></placeholder>
+                    <columns>
+                        <TableColumn fx:id="coverageChainColumn" text="column.chain"
+                                     prefWidth="110"/>
+                        <TableColumn fx:id="coverageSampleColumn" text="column.sample"
+                                     prefWidth="140"/>
+                        <TableColumn fx:id="coverageResiduesColumn" text="column.residues"
+                                     prefWidth="110"/>
+                        <TableColumn fx:id="coveragePercentColumn" text="column.coverage"
+                                     prefWidth="100"/>
+                    </columns>
+                </TableView>
+                <Label fx:id="unmatchedLabel" styleClass="muted" wrapText="true"/>
+            </VBox>
+        </Tab>
+    </TabPane>
+</VBox>

@@ -16,6 +16,7 @@
 
 package com.bioinfo.mabscope.model;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -63,6 +64,34 @@ public record Antibody(String name, List<Chain> chains) {
                 List.of(
                         new Chain("Heavy chain", ChainType.HEAVY, heavy),
                         new Chain("Light chain", ChainType.LIGHT, light)));
+    }
+
+    /**
+     * Creates an antibody from sequences pasted by a user, possibly as FASTA (see {@link
+     * SequenceText#clean(String)}). A chain left empty is omitted.
+     *
+     * @param name display name; {@code Antibody} when blank or {@code null}
+     * @param heavy heavy chain text, possibly {@code null}
+     * @param light light chain text, possibly {@code null}
+     * @return the antibody, with one or two chains named {@code Heavy chain} and {@code Light
+     *     chain}
+     * @throws IllegalArgumentException if both chains are empty or a residue is invalid
+     */
+    public static Antibody fromText(String name, String heavy, String light) {
+        String heavyResidues = SequenceText.clean(heavy);
+        String lightResidues = SequenceText.clean(light);
+        List<Chain> chains = new ArrayList<>();
+        if (!heavyResidues.isEmpty()) {
+            chains.add(new Chain("Heavy chain", ChainType.HEAVY, heavyResidues));
+        }
+        if (!lightResidues.isEmpty()) {
+            chains.add(new Chain("Light chain", ChainType.LIGHT, lightResidues));
+        }
+        if (chains.isEmpty()) {
+            throw new IllegalArgumentException("Enter the sequence of at least one chain");
+        }
+        String displayName = name == null || name.isBlank() ? "Antibody" : name.strip();
+        return new Antibody(displayName, chains);
     }
 
     /**
