@@ -2,10 +2,12 @@
 target/
 
 # Web client: dependencies, production build and test reports
-web/client/node_modules/
-web/client/dist/
-web/client/test-results/
-web/client/playwright-report/
+web/node_modules/
+web/dist/
+web/coverage/
+web/test-results/
+web/playwright-report/
+web/*.log
 
 # IDE settings
 .idea/
